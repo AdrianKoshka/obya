@@ -1,0 +1,261 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer Presentation
+% LaTeX Template
+% Version 1.0 (10/11/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%   PACKAGES AND THEMES
+%----------------------------------------------------------------------------------------
+
+\documentclass[handout]{beamer}
+
+\mode<presentation> {
+\usetheme{default}
+}
+
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+\usepackage{hyperref} % Allows for the use for URLs
+\usepackage{fontspec}
+\usepackage{float} % Allow for the use of floats
+
+% load external font
+\usepackage[sfdefault]{FiraSans}
+%----------------------------------------------------------------------------------------
+%   TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title[Our Bits, Your Applications!]{Flatpak: Our Bits, Your Applications!} % The short title appears at the bottom of every slide, the full title is only on the title page
+
+\author{Adrian Lucr\`{e}ce C\'{e}leste} % Your name
+\institute[Freelance] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+{
+% \\ % Your institution for the title page
+%\medskip
+\emph{adrianlucrececeleste@airmail.cc} % Your email address
+}
+\date{\today} % Date, can be changed to a custom date
+
+\begin{document}
+
+\begin{frame}
+\titlepage{} % Print the title page as the first slide
+\end{frame}
+
+\begin{frame}
+\frametitle{Overview} % Table of contents slide, comment this block out to remove it
+\tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%   PRESENTATION SLIDES
+%----------------------------------------------------------------------------------------
+
+%------------------------------------------------
+\section{Introduction}
+%------------------------------------------------
+\subsection{Who am I?}
+%------------------------------------------------
+\begin{frame}
+	\frametitle{Who am I?}
+	\begin{itemize}
+		\item{Linux user for 5--6 years}
+		\item{Have an interest in security}
+		\item{I maintain the Thunderbird flatpak on Flathub}
+		\item{Working on getting Barrier and remote-viewer / virt-viewer packaged}
+		\item{Unlikely package maintainer}
+	\end{itemize}
+\end{frame}
+\note{
+	\begin{itemize}
+		\item{Intro to security was hardening, 2fa, and sandboxing}
+		\item{Didn't have much luck with deb or RPM}
+		\item{Never saw myself getting into package maintainership}
+	\end{itemize}
+}
+%------------------------------------------------
+\subsection{What is flatpak?} % A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
+
+\begin{frame}
+\frametitle{What is Flatpak?}
+	\begin{large}
+		Distro agnostic package format.
+	\end{large}
+\medskip
+	\begin{itemize}
+		\item{Control over dependencies}
+		\item{Easy build tools}
+		\item{No vendor lock-in}
+		\item{Runtimes}
+		\item{Security}
+			\begin{itemize}
+				\item{Containerization}
+				\item{``Portals''}
+				\item{Sandboxing}
+			\end{itemize}
+	\end{itemize}
+\end{frame}
+%------------------------------------------------
+\section{Flatpak Concepts}
+\subsection{Runtimes}
+%------------------------------------------------
+\begin{frame}
+	\frametitle{``Our Bits'' (Runtimes)}
+	\begin{quotation}
+	\ldots{}Collections of dependencies, which can be used by applications, and which can take a lot of the work out of application development\ldots
+	\end{quotation}
+	\medskip
+	\begin{Large}3 major runtimes (at the time of writing)\end{Large}
+	\begin{itemize}
+		\item{Freedesktop}
+		\item{GNOME}
+		\item{KDE}
+	\end{itemize}
+\end{frame}
+%------------------------------------------------
+\subsection{Portals}
+%------------------------------------------------
+\begin{frame}
+	\frametitle{Portals}
+	\begin{quotation}
+		Portals are high-level session bus APIs that provide selective access to resources to sandboxed applications.
+	\end{quotation}
+	\medskip
+	\begin{Large}Examples of Portals:\end{Large}
+		\begin{itemize}
+			\item{Filesystem access}
+			\item{Network access}
+			\item{X11/Wayland}
+			\item{PulseAudio}
+			\item{OpenGL}
+			\item{IPC}
+		\end{itemize}
+\end{frame}
+%------------------------------------------------
+\subsection{No Vendor Lock-in}
+%------------------------------------------------
+\begin{frame}
+	\frametitle{No vendor lock-in (You have all the tools)}
+	\begin{itemize}
+		\item{Host your own repositories}
+		\item{Create your own runtime(s)}
+	\end{itemize}
+	\begin{figure}[h]\includegraphics[scale=0.25]{tools.jpg}\end{figure}
+\end{frame}
+\note{
+	\begin{itemize}
+		\item{Unlike snap, anyone can host a repo}
+	\end{itemize}
+}
+%------------------------------------------------
+\subsection{Security}
+%------------------------------------------------
+\begin{frame}
+	\frametitle{Security}
+	\begin{itemize}
+		\item{Principle of least privilege}
+		\item{\href{https://github.com/projectatomic/bubblewrap}{Bubblewrap}}
+		\item{Portals}
+		\item{\href{https://github.com/flatpak/flatpak/wiki/Sandbox}{Specifics about sandboxing model}}
+	\end{itemize}
+	\begin{figure}[h]\includegraphics[scale=0.25]{sandbox.jpg}\end{figure}
+\end{frame}
+\note{
+	\begin{itemize}
+		\item{All processes run as the user with no capabilities}
+		\item{User namespaces}
+		\item{Fileystem namespace}
+		\item{Ran as transient systemd user scope}
+		\item{Limited /dev, /etc, / is a private tmpfs, as is /dev/shm}
+		\item{All mounts are no suid}
+		\item{All mounts nodev sans /dev and /dev/pts}
+		\item{/usr is a bind-mount of the runtime}
+	\end{itemize}
+}
+%------------------------------------------------
+\subsection{Easy Build Tools}
+%------------------------------------------------
+\begin{frame}
+	\frametitle{Easy Build Tools}
+	\begin{itemize}
+		\item{Manifest file in JSON or YAML}
+		\item{Appstream validation post-build}
+		\item{flatpak-builder makes building very easy™}
+			\begin{itemize}
+				\item{Assuming upstream project use a sane build system}
+			\end{itemize}
+		\item{Even I can do it™}
+	\end{itemize}
+\end{frame}
+\note{
+	Manifest contains info about:
+	\begin{itemize}
+		\item{Sandbox permissions}
+		\item{Runtime version}
+		\item{Build options}
+	\end{itemize}
+	\medskip
+	\begin{itemize}
+		\item{flatpak-builder is just a wrapper}
+		\item{Builds should just be: ./configure;make;make install, or meson, etc}
+	\end{itemize}
+
+}
+%------------------------------------------------
+\section{My Experience with Flatpak}
+%------------------------------------------------
+\begin{frame}
+	\frametitle{Short overview of packaging Thunderbird}
+	\begin{itemize}
+		\item{Find out someone before me had done 99\% of the work}
+		\item{Notice they hadn't got it up on flathub}
+		\item{Fork their repo}
+		\item{Polish things up a bit}
+		\item{Read flathub submission guidelines}
+		\item{Submit PR to flathub}
+		\item{Work with the flathub team to really polish it up}
+		\item{\ldots}
+		\item{Finally get PR accepted and merged!}
+	\end{itemize}
+\end{frame}
+%------------------------------------------------
+
+%------------------------------------------------
+\begin{frame}
+	\frametitle{Short overview of my progress in packaging Barrier}
+	\begin{itemize}
+		\item{Create a rough-draft manifest}
+		\item{99\% of dependencies are in the KDE runtime}
+		\item{Learn avahi libraries needed aren't in the KDE runtime.}
+		\item{Try to learn how to build avahi, contact an avahi maintainer, eventually get the libraries built}
+		\item{Learn not all projects using auto-tools use it, correctly}
+		\item{Get Barrier to at least build + run properly}
+		\item{Write a rough-draft appstream file}
+		\item{Pester upstream to be more XDG compliant}
+	\end{itemize}
+\end{frame}
+%------------------------------------------------
+
+%------------------------------------------------
+\begin{frame}
+	\Large{\centerline{I hope this inspires you to give flatpak a try!}}
+\end{frame}
+
+%------------------------------------------------
+
+%------------------------------------------------
+\begin{frame}
+\Huge{\centerline{The End}}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+
+\end{document}
